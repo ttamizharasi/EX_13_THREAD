@@ -24,8 +24,8 @@ Step 7: Save and run the application.
 ```
 /*
 Program to print the text “THREAD”.
-Developed by: KISHORE M
-Registeration Number : 212222040079
+Developed by: Tamizharasi S
+Registeration Number : 212222040170
 */
 ```
 ## MainActivity.java
@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
 ## OUTPUT
 
 ![image](https://github.com/user-attachments/assets/9ca30baf-e321-4ef7-b015-e0a481ea2152)
+
 ![Screenshot from 2024-11-11 14-11-01](https://github.com/user-attachments/assets/d722c926-c087-47b7-9e64-7104f11ea212)
 
 ## RESULT
