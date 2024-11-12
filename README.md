@@ -21,10 +21,125 @@ Step 6: Display message give in MainActivity file.
 Step 7: Save and run the application.
 
 ## PROGRAM:
+```
 /*
-Program to print the text “optionmenu”.
-Developed by:
-Registeration Number :
+Program to print the text “THREAD”.
+Developed by: KISHORE M
+Registeration Number : 212222040079
 */
+```
+## MainActivity.java
+```
+package com.example.ex13;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import java.util.concurrent.Semaphore;
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+
+    // Object used for synchronizing access to counter
+    private static final Object lock = new Object();
+
+    // Maximum number of concurrent threads
+    // that can access the counter
+    private static final int MAX_THREADS = 5;
+
+    // Semaphore to limit concurrent access to the counter
+    private static final Semaphore semaphore = new Semaphore(MAX_THREADS);
+
+    // Counter to store the
+    // number of button clicks
+    private int counter = 0;
+
+    // Reference to the text view to
+    // display the number of button clicks
+    private TextView textView;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        textView = findViewById(R.id.text_view);
+    }
+    public void incrementCounter(View view) {
+        // Start a new thread to increment the counter
+        new Thread(() -> {
+            try {
+                // Acquire the semaphore
+                semaphore.acquire();
+                // Synchronized block to update the counter
+                synchronized (lock) {
+                    counter++;
+                }
+            } catch (InterruptedException e) {
+                // Log an error if the thread is interrupted
+                Log.e(TAG, "Thread interrupted", e);
+            } finally {
+                // Release the semaphore
+                semaphore.release();
+            }
+            // Update the text view on the main thread
+            updateTextView();
+        }).start();
+    }
+
+    // Method to update the text view on the main thread
+    private void updateTextView() {
+        // Post the update to the main thread's message queue
+        new Handler(getMainLooper()).post(() -> textView.setText(String.valueOf(counter)));
+    }
+
+}
+```
+
+## activity_main.xml
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- A text view to display the count -->
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/increment_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- A button to increment the count -->
+    <Button
+        android:id="@+id/increment_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="incrementCounter"
+        android:text="Increment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
 ## OUTPUT
+
+![image](https://github.com/user-attachments/assets/9ca30baf-e321-4ef7-b015-e0a481ea2152)
+![Screenshot from 2024-11-11 14-11-01](https://github.com/user-attachments/assets/d722c926-c087-47b7-9e64-7104f11ea212)
+
 ## RESULT
+  Thus a Simple Android Application to create an program that handles thread sychronization using Android Studio is developed and executed successfully.
